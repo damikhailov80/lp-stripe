@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
-import { stripe } from '../../lib/stripe'
+import { stripe } from '../../../../lib/stripe'
 
 export default async function Success({ searchParams }: { searchParams: Promise<{ session_id?: string }> }) {
   const { session_id } = await searchParams
@@ -17,7 +17,7 @@ export default async function Success({ searchParams }: { searchParams: Promise<
   const customerEmail = customer_details?.email
 
   if (status === 'open') {
-    return redirect('/')
+    return redirect('/lp/keratin-repair-mask')
   }
 
   if (status === 'complete') {
@@ -52,9 +52,9 @@ export default async function Success({ searchParams }: { searchParams: Promise<
             </p>
 
             <div className="mt-10 flex gap-4 justify-center">
-              <Link href="/">
+              <Link href="/lp/keratin-repair-mask">
                 <button className="px-8 py-4 rounded-2xl bg-pink-600 text-white font-semibold shadow-lg hover:bg-pink-700 active:scale-95 transition">
-                  Back to home
+                  Back to product
                 </button>
               </Link>
             </div>
