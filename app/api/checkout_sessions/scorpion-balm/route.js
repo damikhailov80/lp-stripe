@@ -12,7 +12,6 @@ export async function POST(request) {
     const quantity = parseInt(formData.get('quantity') || '1', 10)
 
     // Create Checkout Sessions for Scorpion Balm
-    console.log('quantity', quantity);
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {

@@ -1,3 +1,5 @@
+'use client';
+
 export default function SuccessPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-red-950 via-zinc-900 to-orange-950 flex items-center justify-center px-6">
