@@ -1,5 +1,6 @@
 import "./globals.css";
 import Script from "next/script";
+import TrackingInit from "./components/TrackingInit";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,7 +16,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
       </head>
-      <body>{children}</body>
+      <body>
+        <TrackingInit />
+        {children}
+      </body>
     </html>
   )
 }

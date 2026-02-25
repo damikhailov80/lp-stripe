@@ -21,14 +21,14 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-red-950 via-zinc-900 to-orange-950">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE0YzMuMzEgMCA2IDIuNjkgNiA2cy0yLjY5IDYtNiA2LTYtMi42OS02LTYgMi42OS02IDYtNnpNNiAzNGMzLjMxIDAgNiAyLjY5IDYgNnMtMi42OSA2LTYgNi02LTIuNjktNi02IDIuNjktNiA2LTZ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30"></div>
-      
+
       {/* Image Preview Modal */}
       {isImageOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
           onClick={() => setIsImageOpen(false)}
         >
-          <button 
+          <button
             className="absolute top-4 right-4 text-white text-4xl hover:text-red-400 transition z-10"
             onClick={() => setIsImageOpen(false)}
           >
@@ -51,13 +51,16 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
       <div className="mx-auto max-w-6xl px-6 py-6 md:py-8 grid md:grid-cols-2 gap-12 items-center relative z-10">
         <div>
           <div className="p-6 rounded-3xl bg-gradient-to-r from-red-600/20 to-orange-600/20 backdrop-blur-sm border-2 border-red-500/50 shadow-xl">
-            <a 
-              href="https://www.tiktok.com/@balsamdladuszy" 
-              target="_blank" 
+            <a
+              href="https://www.tiktok.com/@balsamdladuszy"
+              target="_blank"
+              data-track="true"
+              data-track-event="ClickButton"
+              data-track-name="Back to tiktok"
               rel="noopener noreferrer"
               className="flex items-center gap-6 hover:opacity-90 transition group"
             >
-              <img 
+              <img
                 src="/assets/images/balsamdladuszy.jpeg"
                 alt="Balsam dla duszy TikTok"
                 className="w-20 h-20 rounded-full border-4 border-red-500 shadow-lg group-hover:scale-110 transition-transform"
@@ -86,7 +89,7 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
                 </span>
               </h1>
             </div>
-            
+
             {/* Mobile Image - Right of Title */}
             <div className="md:hidden flex-shrink-0">
               <img
@@ -111,7 +114,7 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
           </div>
 
           <p className="mt-6 text-lg text-zinc-300 max-w-lg leading-relaxed">
-            Natychmiastowa ulga w bólach mięśni i stawów. Ponad 100 tajskich ziół leczniczych 
+            Natychmiastowa ulga w bólach mięśni i stawów. Ponad 100 tajskich ziół leczniczych
             + ekstrakt z jadu skorpiona dla maksymalnej skuteczności.
           </p>
 
@@ -119,6 +122,9 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
             <div className="flex items-center gap-3 bg-white/10 rounded-xl p-2 border border-zinc-600 w-fit">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                data-track="true"
+                data-track-event="ClickButton"
+                data-track-name="Decrement quantity"
                 className="w-10 h-10 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white font-bold transition"
               >
                 −
@@ -126,6 +132,9 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
               <span className="w-12 text-center text-white font-semibold text-lg">{quantity}</span>
               <button
                 onClick={() => setQuantity(quantity + 1)}
+                data-track="true"
+                data-track-event="ClickButton"
+                data-track-name="Increment quantity"
                 className="w-10 h-10 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white font-bold transition"
               >
                 +
@@ -135,18 +144,27 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
             <div className="flex flex-col sm:flex-row gap-4">
               <form action="/api/checkout_sessions/scorpion-balm" method="POST" className="w-full sm:w-auto">
                 <input type="hidden" name="quantity" value={quantity} />
-                <button type="submit" className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold shadow-2xl hover:shadow-red-500/50 hover:scale-105 active:scale-95 transition-all">
+                <button
+                  type="submit"
+                  data-track="true"
+                  data-track-event="AddToCart"
+                  data-track-name="Purchase"
+                  data-track-quantity={quantity}
+                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold shadow-2xl hover:shadow-red-500/50 hover:scale-105 active:scale-95 transition-all">
                   Kup teraz - 50g × {quantity}
                 </button>
               </form>
 
-              <button 
+              <button
                 onClick={() => {
-                  document.getElementById('benefits')?.scrollIntoView({ 
+                  document.getElementById('benefits')?.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                   });
                 }}
+                data-track="true"
+                data-track-event="ClickButton"
+                data-track-name="Show deatails"
                 className="w-full sm:w-auto px-8 py-4 rounded-2xl border border-zinc-600 text-white hover:bg-white/10 transition text-center"
               >
                 Dowiedz się więcej
@@ -287,8 +305,8 @@ function HowToUse() {
 
         <div className="mt-12 p-6 rounded-2xl bg-yellow-50 border-2 border-yellow-200">
           <p className="text-sm text-zinc-700">
-            <strong className="text-red-600">⚠️ Ważne:</strong> Nie stosować u dzieci poniżej 8 roku życia. 
-            Unikać kontaktu z oczami i błonami śluzowymi. Nie nakładać na uszkodzoną skórę i rany. 
+            <strong className="text-red-600">⚠️ Ważne:</strong> Nie stosować u dzieci poniżej 8 roku życia.
+            Unikać kontaktu z oczami i błonami śluzowymi. Nie nakładać na uszkodzoną skórę i rany.
             Tylko do użytku zewnętrznego.
           </p>
         </div>
@@ -302,14 +320,14 @@ function CTA({ quantity, setQuantity }: { quantity: number; setQuantity: (q: num
     <section className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-red-600 via-orange-600 to-red-700"></div>
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMTRjMy4zMSAwIDYgMi42OSA2IDZzLTIuNjkgNi02IDYtNi0yLjY5LTYtNiAyLjY5LTYgNi02ek02IDM0YzMuMzEgMCA2IDIuNjkgNiA2cy0yLjY5IDYtNiA2LTYtMi42OS02LTYgMi42OS02IDYtNnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
-      
+
       <div className="mx-auto max-w-4xl px-6 text-center relative z-10">
         <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
           Pożegnaj się z bólem już dziś!
         </h2>
 
         <p className="mt-6 text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
-          Dołącz do tysięcy zadowolonych klientów, którzy odkryli moc tajskiego balsamu ze skorpionem. 
+          Dołącz do tysięcy zadowolonych klientów, którzy odkryli moc tajskiego balsamu ze skorpionem.
           Naturalna ulga w bólu bez chemii.
         </p>
 
@@ -317,6 +335,9 @@ function CTA({ quantity, setQuantity }: { quantity: number; setQuantity: (q: num
           <div className="flex items-center gap-3 bg-white/20 rounded-xl p-2 border border-white/30">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              data-track="true"
+              data-track-event="ClickButton"
+              data-track-name="Decrement quantity bottom"
               className="w-12 h-12 rounded-lg bg-white/20 hover:bg-white/30 text-white font-bold transition"
             >
               −
@@ -324,6 +345,9 @@ function CTA({ quantity, setQuantity }: { quantity: number; setQuantity: (q: num
             <span className="w-16 text-center text-white font-semibold text-xl">{quantity}</span>
             <button
               onClick={() => setQuantity(quantity + 1)}
+              data-track="true"
+              data-track-event="ClickButton"
+              data-track-name="Increment quantity bottom"
               className="w-12 h-12 rounded-lg bg-white/20 hover:bg-white/30 text-white font-bold transition"
             >
               +
@@ -332,7 +356,13 @@ function CTA({ quantity, setQuantity }: { quantity: number; setQuantity: (q: num
 
           <form action="/api/checkout_sessions/scorpion-balm" method="POST" className="w-full max-w-md px-4">
             <input type="hidden" name="quantity" value={quantity} />
-            <button type="submit" className="w-full px-8 py-6 rounded-2xl bg-white text-red-600 font-bold text-base sm:text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all hover:shadow-white/50">
+            <button
+              type="submit"
+              data-track="true"
+              data-track-event="AddToCart"
+              data-track-name="Purchase bottom"
+              data-track-quantity={quantity}
+              className="w-full px-8 py-6 rounded-2xl bg-white text-red-600 font-bold text-base sm:text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all hover:shadow-white/50">
               Zamów teraz - 50g × {quantity}
             </button>
           </form>

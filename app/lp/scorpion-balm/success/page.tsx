@@ -1,6 +1,16 @@
 'use client';
 
+import { useEffect } from 'react';
+import { track } from '@/lib/tracking';
+
 export default function SuccessPage() {
+  useEffect(() => {
+    track('Purchase', {
+      product: 'scorpion-balm',
+      page: 'success'
+    });
+  }, []);
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-red-950 via-zinc-900 to-orange-950 flex items-center justify-center px-6">
       <div className="max-w-2xl w-full text-center">
@@ -38,7 +48,7 @@ export default function SuccessPage() {
 
         <div className="p-6 rounded-2xl bg-gradient-to-r from-red-600/20 to-orange-600/20 border border-red-500/30 mb-8">
           <p className="text-white/90 text-sm">
-            💝 <strong>Dziękujemy za wsparcie!</strong> Dzięki Tobie możemy tworzyć więcej contentu o azjatyckich dramach i anime na TikToku: 
+            💝 <strong>Dziękujemy za wsparcie!</strong> Dzięki Tobie możemy tworzyć więcej contentu o azjatyckich dramach i anime na TikToku:
             <a href="https://www.tiktok.com/@balsamdladuszy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white ml-1 font-semibold">
               @balsamdladuszy
             </a>
@@ -46,14 +56,20 @@ export default function SuccessPage() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a 
-            href="/lp/scorpion-balm" 
+          <a
+            href="/lp/scorpion-balm"
             className="px-8 py-4 rounded-2xl bg-white/10 border border-white/30 text-white hover:bg-white/20 transition"
+            data-track="true"
+            data-track-event="ClickButton"
+            data-track-name="Back to product"
           >
             Wróć do strony produktu
           </a>
-          <a 
-            href="https://www.natrathai.com" 
+          <a
+            href="https://www.natrathai.com"
+            data-track="true"
+            data-track-event="ClickButton"
+            data-track-name="Go to shop"
             className="px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold hover:scale-105 transition"
           >
             Zobacz więcej produktów
