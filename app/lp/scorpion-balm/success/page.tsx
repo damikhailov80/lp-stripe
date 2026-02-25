@@ -1,15 +1,31 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { track } from '@/lib/tracking';
 
 export default function SuccessPage() {
+  const searchParams = useSearchParams();
+
   useEffect(() => {
+    const sessionId = searchParams.get('session_id');
+
+    // Не отправляем, если нет session_id
+    if (!sessionId) return;
+
+    // Проверяем, был ли уже отправлен трек для этого session_id
+    const trackedKey = `tracked_purchase_${sessionId}`;
+    if (localStorage.getItem(trackedKey)) return;
+
+    // Отправляем событие и сохраняем в localStorage
     track('Purchase', {
       product: 'scorpion-balm',
-      page: 'success'
+      page: 'success',
+      session_id: sessionId
     });
-  }, []);
+
+    localStorage.setItem(trackedKey, 'true');
+  }, [searchParams]);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-red-950 via-zinc-900 to-orange-950 flex items-center justify-center px-6">
