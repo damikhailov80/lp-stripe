@@ -6,10 +6,13 @@ import Script from 'next/script';
 declare global {
     interface Window {
         dataLayer: any[];
+        gtag: (...args: any[]) => void;
     }
 }
 
 export function Analytics() {
+    const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
             const target = (e.target as HTMLElement).closest('[data-track="true"]');
@@ -18,17 +21,19 @@ export function Analytics() {
             const trackData: Record<string, string> = {};
             Array.from(target.attributes).forEach(attr => {
                 if (attr.name.startsWith('data-track-')) {
-                    const key = 'cta_' + attr.name.replace('data-track-', '');
+                    const key = attr.name.replace('data-track-', '');
                     trackData[key] = attr.value;
                 }
             });
 
             if (Object.keys(trackData).length > 0) {
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
-                    event: 'track_click',
-                    ...trackData
-                });
+                if (typeof window.gtag !== 'undefined') {
+                    const eventParams: Record<string, string> = {};
+                    Object.entries(trackData).forEach(([key, value]) => {
+                        eventParams[`cta_${key}`] = value;
+                    });
+                    window.gtag('event', 'cta_click', eventParams);
+                }
             }
         };
 
@@ -36,7 +41,9 @@ export function Analytics() {
         return () => document.removeEventListener('click', handleClick);
     }, []);
 
-    const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+    if (!gaId) {
+        return null;
+    }
 
     return (
         <>
@@ -46,11 +53,11 @@ export function Analytics() {
             />
             <Script id="google-analytics" strategy="afterInteractive">
                 {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${gaId}');
-        `}
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${gaId}');
+                `}
             </Script>
         </>
     );
