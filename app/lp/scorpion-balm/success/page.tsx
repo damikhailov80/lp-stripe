@@ -37,7 +37,7 @@ export default function SuccessPage() {
         <div className="p-6 rounded-2xl bg-gradient-to-r from-red-600/20 to-orange-600/20 border border-red-500/30 mb-8">
           <p className="text-white/90 text-sm">
             💝 <strong>Dziękujemy za wsparcie!</strong> Dzięki Tobie możemy tworzyć więcej contentu o azjatyckich dramach i anime na TikToku:
-            <a href="https://www.tiktok.com/@balsamdladuszy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white ml-1 font-semibold">
+            <a href="https://www.tiktok.com/@balsamdladuszy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white ml-1 font-semibold" data-track="true" data-track-name="tiktok_link">
               @balsamdladuszy
             </a>
           </p>
@@ -47,12 +47,16 @@ export default function SuccessPage() {
           <a
             href="/lp/scorpion-balm"
             className="px-8 py-4 rounded-2xl bg-white/10 border border-white/30 text-white hover:bg-white/20 transition"
+            data-track="true"
+            data-track-name="back_to_product"
           >
             Wróć do strony produktu
           </a>
           <a
             href="https://www.natrathai.com"
             className="px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold hover:scale-105 transition"
+            data-track="true"
+            data-track-name="more_products"
           >
             Zobacz więcej produktów
           </a>

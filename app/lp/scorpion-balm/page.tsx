@@ -56,6 +56,8 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-6 hover:opacity-90 transition group"
+              data-track="true"
+              data-track-name="tiktok_link"
             >
               <img
                 src="/assets/images/balsamdladuszy.jpeg"
@@ -120,6 +122,8 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 className="w-10 h-10 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white font-bold transition"
+                data-track="true"
+                data-track-name="quantity_decrease_top"
               >
                 −
               </button>
@@ -127,6 +131,8 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
               <button
                 onClick={() => setQuantity(quantity + 1)}
                 className="w-10 h-10 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white font-bold transition"
+                data-track="true"
+                data-track-name="quantity_increase_top"
               >
                 +
               </button>
@@ -137,7 +143,10 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
                 <input type="hidden" name="quantity" value={quantity} />
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold shadow-2xl hover:shadow-red-500/50 hover:scale-105 active:scale-95 transition-all">
+                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold shadow-2xl hover:shadow-red-500/50 hover:scale-105 active:scale-95 transition-all"
+                  data-track="true"
+                  data-track-name="buy_now_top"
+                >
                   Kup teraz - 50g × {quantity}
                 </button>
               </form>
@@ -150,6 +159,8 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
                   });
                 }}
                 className="w-full sm:w-auto px-8 py-4 rounded-2xl border border-zinc-600 text-white hover:bg-white/10 transition text-center"
+                data-track="true"
+                data-track-name="learn_more"
               >
                 Dowiedz się więcej
               </button>
@@ -320,6 +331,8 @@ function CTA({ quantity, setQuantity }: { quantity: number; setQuantity: (q: num
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
               className="w-12 h-12 rounded-lg bg-white/20 hover:bg-white/30 text-white font-bold transition"
+              data-track="true"
+              data-track-name="quantity_decrease_bottom"
             >
               −
             </button>
@@ -327,6 +340,8 @@ function CTA({ quantity, setQuantity }: { quantity: number; setQuantity: (q: num
             <button
               onClick={() => setQuantity(quantity + 1)}
               className="w-12 h-12 rounded-lg bg-white/20 hover:bg-white/30 text-white font-bold transition"
+              data-track="true"
+              data-track-name="quantity_increase_bottom"
             >
               +
             </button>
@@ -336,7 +351,10 @@ function CTA({ quantity, setQuantity }: { quantity: number; setQuantity: (q: num
             <input type="hidden" name="quantity" value={quantity} />
             <button
               type="submit"
-              className="w-full px-8 py-6 rounded-2xl bg-white text-red-600 font-bold text-base sm:text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all hover:shadow-white/50">
+              className="w-full px-8 py-6 rounded-2xl bg-white text-red-600 font-bold text-base sm:text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all hover:shadow-white/50"
+              data-track="true"
+              data-track-name="buy_now_bottom"
+            >
               Zamów teraz - 50g × {quantity}
             </button>
           </form>
