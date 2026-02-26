@@ -54,9 +54,6 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
             <a
               href="https://www.tiktok.com/@balsamdladuszy"
               target="_blank"
-              data-track="true"
-              data-track-event="ClickButton"
-              data-track-name="Back to tiktok"
               rel="noopener noreferrer"
               className="flex items-center gap-6 hover:opacity-90 transition group"
             >
@@ -122,9 +119,6 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
             <div className="flex items-center gap-3 bg-white/10 rounded-xl p-2 border border-zinc-600 w-fit">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                data-track="true"
-                data-track-event="ClickButton"
-                data-track-name="Decrement quantity"
                 className="w-10 h-10 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white font-bold transition"
               >
                 −
@@ -132,9 +126,6 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
               <span className="w-12 text-center text-white font-semibold text-lg">{quantity}</span>
               <button
                 onClick={() => setQuantity(quantity + 1)}
-                data-track="true"
-                data-track-event="ClickButton"
-                data-track-name="Increment quantity"
                 className="w-10 h-10 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white font-bold transition"
               >
                 +
@@ -146,10 +137,6 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
                 <input type="hidden" name="quantity" value={quantity} />
                 <button
                   type="submit"
-                  data-track="true"
-                  data-track-event="AddToCart"
-                  data-track-name="Purchase"
-                  data-track-quantity={quantity}
                   className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold shadow-2xl hover:shadow-red-500/50 hover:scale-105 active:scale-95 transition-all">
                   Kup teraz - 50g × {quantity}
                 </button>
@@ -162,9 +149,6 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
                     block: 'start'
                   });
                 }}
-                data-track="true"
-                data-track-event="ClickButton"
-                data-track-name="Show deatails"
                 className="w-full sm:w-auto px-8 py-4 rounded-2xl border border-zinc-600 text-white hover:bg-white/10 transition text-center"
               >
                 Dowiedz się więcej
@@ -335,9 +319,6 @@ function CTA({ quantity, setQuantity }: { quantity: number; setQuantity: (q: num
           <div className="flex items-center gap-3 bg-white/20 rounded-xl p-2 border border-white/30">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              data-track="true"
-              data-track-event="ClickButton"
-              data-track-name="Decrement quantity bottom"
               className="w-12 h-12 rounded-lg bg-white/20 hover:bg-white/30 text-white font-bold transition"
             >
               −
@@ -345,9 +326,6 @@ function CTA({ quantity, setQuantity }: { quantity: number; setQuantity: (q: num
             <span className="w-16 text-center text-white font-semibold text-xl">{quantity}</span>
             <button
               onClick={() => setQuantity(quantity + 1)}
-              data-track="true"
-              data-track-event="ClickButton"
-              data-track-name="Increment quantity bottom"
               className="w-12 h-12 rounded-lg bg-white/20 hover:bg-white/30 text-white font-bold transition"
             >
               +
@@ -358,10 +336,6 @@ function CTA({ quantity, setQuantity }: { quantity: number; setQuantity: (q: num
             <input type="hidden" name="quantity" value={quantity} />
             <button
               type="submit"
-              data-track="true"
-              data-track-event="AddToCart"
-              data-track-name="Purchase bottom"
-              data-track-quantity={quantity}
               className="w-full px-8 py-6 rounded-2xl bg-white text-red-600 font-bold text-base sm:text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all hover:shadow-white/50">
               Zamów teraz - 50g × {quantity}
             </button>

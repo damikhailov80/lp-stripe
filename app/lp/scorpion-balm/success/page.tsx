@@ -1,32 +1,4 @@
-'use client';
-
-import { useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { track } from '@/lib/tracking';
-
 export default function SuccessPage() {
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const sessionId = searchParams.get('session_id');
-
-    // Не отправляем, если нет session_id
-    if (!sessionId) return;
-
-    // Проверяем, был ли уже отправлен трек для этого session_id
-    const trackedKey = `tracked_purchase_${sessionId}`;
-    if (localStorage.getItem(trackedKey)) return;
-
-    // Отправляем событие и сохраняем в localStorage
-    track('Purchase', {
-      product: 'scorpion-balm',
-      page: 'success',
-      session_id: sessionId
-    });
-
-    localStorage.setItem(trackedKey, 'true');
-  }, [searchParams]);
-
   return (
     <main className="min-h-screen bg-gradient-to-br from-red-950 via-zinc-900 to-orange-950 flex items-center justify-center px-6">
       <div className="max-w-2xl w-full text-center">
@@ -75,17 +47,11 @@ export default function SuccessPage() {
           <a
             href="/lp/scorpion-balm"
             className="px-8 py-4 rounded-2xl bg-white/10 border border-white/30 text-white hover:bg-white/20 transition"
-            data-track="true"
-            data-track-event="ClickButton"
-            data-track-name="Back to product"
           >
             Wróć do strony produktu
           </a>
           <a
             href="https://www.natrathai.com"
-            data-track="true"
-            data-track-event="ClickButton"
-            data-track-name="Go to shop"
             className="px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold hover:scale-105 transition"
           >
             Zobacz więcej produktów
