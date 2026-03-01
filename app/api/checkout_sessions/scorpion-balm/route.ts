@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
         // Create Checkout Sessions for Scorpion Balm
         const priceId = process.env.NODE_ENV === 'production'
-            ? 'price_1T4eesHSVM2lsj0JF3QX4aKI'
+            ? 'price_1T68KgHSVM2lsj0Jss4XYXJz'
             : 'price_1T4by9FxNbQ4QwoifKmO4gxC'
 
         const session = await stripe.checkout.sessions.create({
