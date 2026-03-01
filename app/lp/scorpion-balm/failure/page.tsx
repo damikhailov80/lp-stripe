@@ -1,4 +1,10 @@
-export default function FailurePage() {
+export default function FailurePage({
+    searchParams,
+}: {
+    searchParams: { session_id?: string; tt_account?: string };
+}) {
+    const { session_id, tt_account } = searchParams;
+
     return (
         <main className="min-h-screen bg-gradient-to-br from-red-950 via-zinc-900 to-orange-950 flex items-center justify-center px-6">
             <div className="max-w-2xl w-full text-center">
@@ -57,6 +63,13 @@ export default function FailurePage() {
                         Spróbuj ponownie
                     </a>
                 </div>
+
+                {/* Hidden data for tracking/analytics */}
+                {tt_account && (
+                    <div className="hidden" data-tt-account={tt_account}>
+                        {/* TikTok tracking parameter available for analytics */}
+                    </div>
+                )}
             </div>
         </main>
     );
