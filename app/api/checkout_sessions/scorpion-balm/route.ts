@@ -40,6 +40,9 @@ export async function POST(request: Request) {
             mode: 'payment',
             success_url: successUrl.toString(),
             cancel_url: cancelUrl.toString(),
+            shipping_address_collection: {
+                allowed_countries: ['PL'],
+            },
             metadata: {
                 ...(ttAccount && { tt_account: ttAccount }),
             },
