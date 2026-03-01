@@ -79,11 +79,18 @@ export async function POST(req: Request) {
                             }]
                         }
 
+                        console.log('🔑 Environment check:', {
+                            hasMeasurementId: !!process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
+                            hasApiSecret: !!process.env.GA_API_SECRET,
+                            measurementId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+                        })
+
                         const gaUrl = `https://www.google-analytics.com/mp/collect?measurement_id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`
 
                         console.log('📤 GA Request URL:', gaUrl.replace(process.env.GA_API_SECRET || '', '***'))
                         console.log('📤 GA Payload:', JSON.stringify(gaPayload, null, 2))
 
+                        console.log('⏳ Starting fetch to GA...')
                         try {
                             const gaResponse = await fetch(gaUrl, {
                                 method: 'POST',
@@ -91,6 +98,7 @@ export async function POST(req: Request) {
                                 body: JSON.stringify(gaPayload)
                             })
 
+                            console.log('✅ Fetch completed!')
                             console.log(`✅ GA Response Status: ${gaResponse.status} ${gaResponse.statusText}`)
 
                             const responseText = await gaResponse.text()
@@ -102,6 +110,8 @@ export async function POST(req: Request) {
                                     statusText: gaResponse.statusText,
                                     body: responseText
                                 })
+                            } else {
+                                console.log('🎉 GA event successfully sent!')
                             }
                         } catch (gaError) {
                             console.error('❌ GA fetch error:', gaError)
@@ -110,6 +120,7 @@ export async function POST(req: Request) {
                                 stack: gaError instanceof Error ? gaError.stack : undefined
                             })
                         }
+                        console.log('✔️ GA block completed')
                     }
                     break
 
