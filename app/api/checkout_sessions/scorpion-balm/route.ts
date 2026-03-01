@@ -26,11 +26,14 @@ export async function POST(request: Request) {
         if (ttAccount) cancelUrl.searchParams.set('tt_account', ttAccount)
 
         // Create Checkout Sessions for Scorpion Balm
+        const priceId = process.env.NODE_ENV === 'production'
+            ? 'price_1T4eesHSVM2lsj0JF3QX4aKI'
+            : 'price_1T4by9FxNbQ4QwoifKmO4gxC'
+
         const session = await stripe.checkout.sessions.create({
             line_items: [
                 {
-                    // Replace with your actual Stripe Price ID (starts with price_)
-                    price: 'price_1T4by9FxNbQ4QwoifKmO4gxC',
+                    price: priceId,
                     quantity: quantity,
                 },
             ],
