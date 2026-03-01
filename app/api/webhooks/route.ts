@@ -46,6 +46,15 @@ export async function POST(req: Request) {
                     console.log(`✓ Checkout completed: ${data.id}, status: ${data.payment_status}`)
 
                     if (data.payment_status === 'paid') {
+                        console.log('🔍 Preparing GA purchase event...')
+                        console.log('Session data:', JSON.stringify({
+                            id: data.id,
+                            client_reference_id: data.client_reference_id,
+                            amount_total: data.amount_total,
+                            currency: data.currency,
+                            metadata: data.metadata
+                        }, null, 2))
+
                         const eventParams: Record<string, any> = {
                             transaction_id: data.id,
                             value: (data.amount_total || 0) / 100,
@@ -62,21 +71,45 @@ export async function POST(req: Request) {
                             eventParams.tt_account = data.metadata.tt_account
                         }
 
-                        const gaResponse = await fetch(
-                            `https://www.google-analytics.com/mp/collect?measurement_id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`,
-                            {
+                        const gaPayload = {
+                            client_id: data.client_reference_id || data.id,
+                            events: [{
+                                name: 'purchase',
+                                params: eventParams
+                            }]
+                        }
+
+                        const gaUrl = `https://www.google-analytics.com/mp/collect?measurement_id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`
+
+                        console.log('📤 GA Request URL:', gaUrl.replace(process.env.GA_API_SECRET || '', '***'))
+                        console.log('📤 GA Payload:', JSON.stringify(gaPayload, null, 2))
+
+                        try {
+                            const gaResponse = await fetch(gaUrl, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    client_id: data.client_reference_id || data.id,
-                                    events: [{
-                                        name: 'purchase',
-                                        params: eventParams
-                                    }]
+                                body: JSON.stringify(gaPayload)
+                            })
+
+                            console.log(`✅ GA Response Status: ${gaResponse.status} ${gaResponse.statusText}`)
+
+                            const responseText = await gaResponse.text()
+                            console.log('📥 GA Response Body:', responseText || '(empty)')
+
+                            if (!gaResponse.ok) {
+                                console.error('❌ GA request failed:', {
+                                    status: gaResponse.status,
+                                    statusText: gaResponse.statusText,
+                                    body: responseText
                                 })
                             }
-                        )
-                        console.log(`GA purchase event sent: ${gaResponse.status}`)
+                        } catch (gaError) {
+                            console.error('❌ GA fetch error:', gaError)
+                            console.error('Error details:', {
+                                message: gaError instanceof Error ? gaError.message : 'Unknown error',
+                                stack: gaError instanceof Error ? gaError.stack : undefined
+                            })
+                        }
                     }
                     break
 
