@@ -21,6 +21,10 @@ export async function POST(request: Request) {
         successUrl.searchParams.set('session_id', '{CHECKOUT_SESSION_ID}')
         if (ttAccount) successUrl.searchParams.set('tt_account', ttAccount)
 
+        // Build cancel/failure URL with query parameters
+        const cancelUrl = new URL(`${origin}/lp/scorpion-balm/failure`)
+        if (ttAccount) cancelUrl.searchParams.set('tt_account', ttAccount)
+
         // Create Checkout Sessions for Scorpion Balm
         const session = await stripe.checkout.sessions.create({
             line_items: [
@@ -32,7 +36,7 @@ export async function POST(request: Request) {
             ],
             mode: 'payment',
             success_url: successUrl.toString(),
-            cancel_url: `${origin}/lp/scorpion-balm`,
+            cancel_url: cancelUrl.toString(),
             metadata: {
                 ...(ttAccount && { tt_account: ttAccount }),
             },
