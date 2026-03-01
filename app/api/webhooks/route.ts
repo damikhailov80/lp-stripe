@@ -36,23 +36,30 @@ export async function POST(req: Request) {
 
                     // Send to Google Analytics
                     if (data.payment_status === 'paid') {
+                        const eventParams: Record<string, any> = {
+                            transaction_id: data.id,
+                            value: (data.amount_total || 0) / 100,
+                            currency: data.currency?.toUpperCase(),
+                            items: [{
+                                item_id: 'scorpion-balm',
+                                item_name: 'Banna Scorpion Thai Balm Black',
+                                price: (data.amount_total || 0) / 100,
+                                quantity: 1
+                            }]
+                        }
+
+                        // Add TikTok tracking parameter if available in metadata
+                        if (data.metadata?.tt_account) {
+                            eventParams.tt_account = data.metadata.tt_account
+                        }
+
                         await fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`, {
                             method: 'POST',
                             body: JSON.stringify({
                                 client_id: data.client_reference_id || data.id,
                                 events: [{
                                     name: 'purchase',
-                                    params: {
-                                        transaction_id: data.id,
-                                        value: (data.amount_total || 0) / 100,
-                                        currency: data.currency?.toUpperCase(),
-                                        items: [{
-                                            item_id: 'scorpion-balm',
-                                            item_name: 'Banna Scorpion Thai Balm Black',
-                                            price: (data.amount_total || 0) / 100,
-                                            quantity: 1
-                                        }]
-                                    }
+                                    params: eventParams
                                 }]
                             })
                         })
@@ -64,17 +71,24 @@ export async function POST(req: Request) {
                     console.log(`Payment failed for session: ${data.id}`)
 
                     // Send failed transaction to GA
+                    const failedEventParams: Record<string, any> = {
+                        transaction_id: data.id,
+                        value: (data.amount_total || 0) / 100,
+                        currency: data.currency?.toUpperCase()
+                    }
+
+                    // Add TikTok tracking parameter if available in metadata
+                    if (data.metadata?.tt_account) {
+                        failedEventParams.tt_account = data.metadata.tt_account
+                    }
+
                     await fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`, {
                         method: 'POST',
                         body: JSON.stringify({
                             client_id: data.client_reference_id || data.id,
                             events: [{
                                 name: 'payment_failed',
-                                params: {
-                                    transaction_id: data.id,
-                                    value: (data.amount_total || 0) / 100,
-                                    currency: data.currency?.toUpperCase()
-                                }
+                                params: failedEventParams
                             }]
                         })
                     })

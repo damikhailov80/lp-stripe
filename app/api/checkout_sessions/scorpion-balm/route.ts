@@ -7,9 +7,19 @@ export async function POST(request: Request) {
     try {
         const headersList = await headers()
         const origin = headersList.get('origin')
+        const referer = headersList.get('referer') || ''
 
         const formData = await request.formData()
         const quantity = parseInt(formData.get('quantity') as string || '1', 10)
+
+        // Extract query parameters from referer URL
+        const refererUrl = new URL(referer)
+        const ttAccount = refererUrl.searchParams.get('tt_account')
+
+        // Build success URL with query parameters
+        const successUrl = new URL(`${origin}/lp/scorpion-balm/success`)
+        successUrl.searchParams.set('session_id', '{CHECKOUT_SESSION_ID}')
+        if (ttAccount) successUrl.searchParams.set('tt_account', ttAccount)
 
         // Create Checkout Sessions for Scorpion Balm
         const session = await stripe.checkout.sessions.create({
@@ -21,8 +31,11 @@ export async function POST(request: Request) {
                 },
             ],
             mode: 'payment',
-            success_url: `${origin}/lp/scorpion-balm/success?session_id={CHECKOUT_SESSION_ID}`,
+            success_url: successUrl.toString(),
             cancel_url: `${origin}/lp/scorpion-balm`,
+            metadata: {
+                ...(ttAccount && { tt_account: ttAccount }),
+            },
         })
 
         if (!session.url) {
