@@ -40,6 +40,7 @@ export async function POST(request: Request) {
             mode: 'payment',
             success_url: successUrl.toString(),
             cancel_url: cancelUrl.toString(),
+            billing_address_collection: 'required',
             shipping_address_collection: {
                 allowed_countries: ['PL'],
             },
