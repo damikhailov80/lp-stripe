@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         )
     }
 
-    // Быстро возвращаем 200 и обрабатываем асинхронно
+    // Обрабатываем событие синхронно перед возвратом ответа
     const processEvent = async () => {
         const permittedEvents = ['checkout.session.completed', 'checkout.session.async_payment_failed']
 
@@ -92,12 +92,20 @@ export async function POST(req: Request) {
 
                         console.log('⏳ Starting fetch to GA...')
                         try {
+                            const controller = new AbortController()
+                            const timeoutId = setTimeout(() => {
+                                console.log('⏰ Fetch timeout - aborting')
+                                controller.abort()
+                            }, 10000) // 10 second timeout
+
                             const gaResponse = await fetch(gaUrl, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(gaPayload)
+                                body: JSON.stringify(gaPayload),
+                                signal: controller.signal
                             })
 
+                            clearTimeout(timeoutId)
                             console.log('✅ Fetch completed!')
                             console.log(`✅ GA Response Status: ${gaResponse.status} ${gaResponse.statusText}`)
 
@@ -114,11 +122,16 @@ export async function POST(req: Request) {
                                 console.log('🎉 GA event successfully sent!')
                             }
                         } catch (gaError) {
-                            console.error('❌ GA fetch error:', gaError)
-                            console.error('Error details:', {
-                                message: gaError instanceof Error ? gaError.message : 'Unknown error',
-                                stack: gaError instanceof Error ? gaError.stack : undefined
-                            })
+                            if (gaError instanceof Error && gaError.name === 'AbortError') {
+                                console.error('❌ GA fetch timeout after 10 seconds')
+                            } else {
+                                console.error('❌ GA fetch error:', gaError)
+                                console.error('Error details:', {
+                                    message: gaError instanceof Error ? gaError.message : 'Unknown error',
+                                    name: gaError instanceof Error ? gaError.name : undefined,
+                                    stack: gaError instanceof Error ? gaError.stack : undefined
+                                })
+                            }
                         }
                         console.log('✔️ GA block completed')
                     }
@@ -159,9 +172,9 @@ export async function POST(req: Request) {
         }
     }
 
-    // Запускаем обработку асинхронно
-    processEvent().catch(err => console.error('Async processing error:', err))
+    // Ждем завершения обработки перед возвратом ответа
+    await processEvent().catch(err => console.error('Processing error:', err))
 
-    // Быстро возвращаем 200
+    // Возвращаем 200 после обработки
     return NextResponse.json({ received: true }, { status: 200 })
 }

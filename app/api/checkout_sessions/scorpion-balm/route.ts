@@ -44,6 +44,7 @@ export async function POST(request: Request) {
             shipping_address_collection: {
                 allowed_countries: ['PL'],
             },
+            locale: 'pl',
             metadata: {
                 ...(ttAccount && { tt_account: ttAccount }),
             },
