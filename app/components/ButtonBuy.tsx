@@ -17,15 +17,6 @@ export default function ButtonBuy({
 }: ButtonBuyProps) {
     const isPrimary = variant === 'primary';
 
-    console.log('🛒 ButtonBuy rendered:', {
-        productId,
-        priceId,
-        quantity,
-        weight,
-        variant,
-        trackingName
-    });
-
     return (
         <form
             action="/api/stripe/checkout"
