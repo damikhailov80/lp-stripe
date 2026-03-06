@@ -27,6 +27,13 @@ function PageContent() {
   const product = productsData[selectedProductId];
   const priceId = getStripePriceId(product.id, product.stripePriceId);
 
+  console.log('📄 Page rendered:', {
+    selectedProductId,
+    productId: product.id,
+    stripePriceId: product.stripePriceId,
+    resolvedPriceId: priceId
+  });
+
   const updateProductInUrl = (productId: ProductId) => {
     setSelectedProductId(productId);
     const params = new URLSearchParams(searchParams.toString());
