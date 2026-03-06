@@ -26,7 +26,7 @@ export const productsData: Record<string, Product> = {
         discount: "-7%",
         weight: "50g",
         rating: 4.8,
-        imagePath: "/assets/images/warming-ointments/scorpion-balm.avif",
+        imagePath: "/assets/images/banna-tajskie-balsamy/scorpion-balm.avif",
         imageAlt: "Banna Scorpion Thai Balm Black",
         description: "Natychmiastowa ulga w bólach mięśni i stawów. Ponad 100 tajskich ziół leczniczych + ekstrakt z jadu skorpiona dla maksymalnej skuteczności.",
         stripePriceId: {
@@ -43,7 +43,7 @@ export const productsData: Record<string, Product> = {
         discount: "-7%",
         weight: "50g",
         rating: 4.9,
-        imagePath: "/assets/images/warming-ointments/cobra-balm.jpeg",
+        imagePath: "/assets/images/banna-tajskie-balsamy/cobra-balm.jpeg",
         imageAlt: "Banna Cobra Thai Balm Black",
         description: "Intensywne rozgrzewanie i regeneracja mięśni. Tajska formuła wzbogacona jadem kobry dla głębokiego działania przeciwbólowego i regenerującego.",
         stripePriceId: {
@@ -60,7 +60,7 @@ export const productsData: Record<string, Product> = {
         discount: "-7%",
         weight: "50g",
         rating: 4.7,
-        imagePath: "/assets/images/warming-ointments/tiger-balm.jpeg",
+        imagePath: "/assets/images/banna-tajskie-balsamy/tiger-balm.jpeg",
         imageAlt: "Banna Tiger Thai Balm",
         description: "Klasyczny tygrysi balsam o silnym działaniu rozgrzewającym. Idealny do masażu przy bólach pleców, karku i stawów.",
         stripePriceId: {
