@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { productsData } from './data';
 import ButtonBuy from '../../components/ButtonBuy';
@@ -11,7 +11,7 @@ type ProductId = keyof typeof productsData;
 const productIds = Object.keys(productsData) as ProductId[];
 const defaultProductId = productIds[0];
 
-export default function Page() {
+function PageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -48,6 +48,14 @@ export default function Page() {
       <HowToUse />
       <CTA quantity={quantity} setQuantity={setQuantity} product={product} priceId={priceId} />
     </main>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <PageContent />
+    </Suspense>
   );
 }
 
