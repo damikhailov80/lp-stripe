@@ -25,7 +25,7 @@ function PageContent() {
   });
 
   const product = productsData[selectedProductId];
-  const priceId = getStripePriceId(product.id, product.stripePriceId);
+  const priceId = getStripePriceId(product.stripePriceId);
 
   const updateProductInUrl = (productId: ProductId) => {
     setSelectedProductId(productId);
