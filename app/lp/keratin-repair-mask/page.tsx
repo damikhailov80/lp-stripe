@@ -18,6 +18,7 @@ export default function LandingPage() {
       <Marquee />
       <BeforeAfter />
       <VideoSection />
+      <IngredientsFocus />
       <Benefits />
       <HowToUse />
       <CTA quantity={quantity} setQuantity={setQuantity} price={price} />
@@ -107,20 +108,21 @@ function Hero({ quantity, setQuantity, price }: ProductProps) {
             </p>
 
             {/* Блок покупки (Счетчик + Кнопка) */}
-            <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto items-center sm:items-stretch border-t border-pink-100 pt-8 sm:border-0 sm:pt-0">
+            <div className="mt-6 md:mt-10 flex flex-row gap-3 w-full sm:w-auto items-center border-t border-pink-100 pt-6 sm:border-0 sm:pt-0">
               
-              {/* Уменьшенный счетчик для мобильных */}
-              <div className="flex items-center gap-2 md:gap-3 bg-white rounded-2xl p-1.5 md:p-2 border border-zinc-200 shadow-sm w-full sm:w-auto justify-center">
-                <button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-zinc-50 hover:bg-zinc-100 text-zinc-600 font-bold text-lg md:text-xl transition flex items-center justify-center">−</button>
-                <span className="w-8 text-center text-zinc-900 font-bold text-lg md:text-xl">{quantity}</span>
-                <button type="button" onClick={() => setQuantity(quantity + 1)} className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-600 font-bold text-lg md:text-xl transition flex items-center justify-center">+</button>
+              {/* Ультра-компактный счетчик */}
+              <div className="flex items-center gap-1 md:gap-3 bg-white rounded-[1rem] md:rounded-2xl p-1 md:p-2 border border-zinc-200 shadow-sm shrink-0">
+                <button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-zinc-50 hover:bg-zinc-100 text-zinc-600 font-bold text-base md:text-xl transition flex items-center justify-center">−</button>
+                <span className="w-6 md:w-8 text-center text-zinc-900 font-bold text-base md:text-xl">{quantity}</span>
+                <button type="button" onClick={() => setQuantity(quantity + 1)} className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-600 font-bold text-base md:text-xl transition flex items-center justify-center">+</button>
               </div>
 
-              <form action="/api/checkout_sessions" method="POST" className="w-full sm:w-auto flex-1">
+              {/* Кнопка покупки */}
+              <form action="/api/checkout_sessions" method="POST" className="flex-1 sm:w-auto h-full">
                 <input type="hidden" name="quantity" value={quantity} />
-                <button type="submit" className="w-full h-full px-6 md:px-8 py-3.5 md:py-4 rounded-2xl bg-pink-600 text-white font-bold text-base md:text-lg shadow-xl shadow-pink-200 hover:bg-pink-700 hover:-translate-y-0.5 active:scale-95 transition-all flex items-center justify-center gap-2">
-                  Kup teraz 
-                  <span className="bg-white/20 px-2 py-1 rounded-md text-xs md:text-sm ml-1 md:ml-2">{(price * quantity).toFixed(2).replace('.', ',')} zł</span>
+                <button type="submit" className="w-full h-full min-h-[40px] md:min-h-[64px] px-2 md:px-8 py-3 md:py-4 rounded-[1rem] md:rounded-2xl bg-pink-600 text-white font-bold text-sm sm:text-base md:text-lg shadow-xl shadow-pink-200 hover:bg-pink-700 active:scale-95 transition-all flex items-center justify-center gap-1 md:gap-2">
+                  <span className="whitespace-nowrap">Kup teraz</span>
+                  <span className="bg-white/20 px-1.5 py-1 md:px-2 rounded-md text-xs md:text-sm ml-1 whitespace-nowrap">{(price * quantity).toFixed(2).replace('.', ',')} zł</span>
                 </button>
               </form>
             </div>
@@ -255,6 +257,71 @@ function VideoSection() {
   );
 }
 
+// 9. Секция с Ингредиентами (Состав)
+function IngredientsFocus() {
+  return (
+    <section className="py-16 md:py-24 bg-gradient-to-b from-white to-pink-50/50 overflow-hidden">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        
+        {/* Заголовок секции */}
+        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
+          <h2 className="text-2xl md:text-5xl font-black tracking-tight text-zinc-900 mb-4 md:mb-5">
+            Sekret lustrzanego blasku
+          </h2>
+          <p className="text-base md:text-lg text-zinc-600 leading-relaxed px-2">
+            Połączyliśmy dwa najpotężniejsze składniki w kosmetologii, aby stworzyć formułę, która reanimuje nawet najbardziej zniszczone pasma.
+          </p>
+        </div>
+
+        {/* Карточки ингредиентов */}
+        <div className="grid md:grid-cols-2 gap-6 md:gap-12">
+          
+          {/* 1. Кератин */}
+          <div className="group relative rounded-[2rem] md:rounded-[2.5rem] bg-white p-6 md:p-10 shadow-xl shadow-zinc-200/50 border border-zinc-100 overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl flex flex-col justify-between">
+            <div className="absolute top-0 right-0 w-48 md:w-64 h-48 md:h-64 bg-amber-200 opacity-20 rounded-full blur-3xl group-hover:bg-amber-300 transition-colors duration-700"></div>
+            
+            <div className="relative z-10 mb-6 md:mb-8">
+              <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-amber-100 to-amber-50 rounded-xl md:rounded-2xl flex items-center justify-center mb-5 md:mb-8 text-2xl md:text-3xl shadow-sm border border-amber-200 group-hover:scale-110 transition-transform duration-500">
+                ✨
+              </div>
+              <h3 className="text-xl md:text-3xl font-bold text-zinc-900 mb-3 md:mb-4">Aktywna Keratyna</h3>
+              <p className="text-zinc-600 leading-relaxed text-sm md:text-lg">
+                Główny budulec włosa. Inteligentnie wykrywa uszkodzenia i wypełnia mikroubytki w strukturze. Działa jak cement – <strong className="text-zinc-900 font-semibold">odbudowuje zniszczone pasma</strong> po farbowaniu i stylizacji, zapobiegając ich łamaniu się.
+              </p>
+            </div>
+            
+            <div className="relative w-full h-40 md:h-56 rounded-2xl md:rounded-3xl overflow-hidden shadow-inner mt-auto">
+              <img src="/assets/images/keratin.png" alt="Keratyna" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-t from-amber-900/30 to-transparent mix-blend-multiply"></div>
+            </div>
+          </div>
+
+          {/* 2. Гиалуроновая кислота */}
+          <div className="group relative rounded-[2rem] md:rounded-[2.5rem] bg-white p-6 md:p-10 shadow-xl shadow-zinc-200/50 border border-zinc-100 overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl flex flex-col justify-between">
+            <div className="absolute top-0 right-0 w-48 md:w-64 h-48 md:h-64 bg-blue-300 opacity-20 rounded-full blur-3xl group-hover:bg-blue-400 transition-colors duration-700"></div>
+            
+            <div className="relative z-10 mb-6 md:mb-8">
+              <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-blue-100 to-blue-50 rounded-xl md:rounded-2xl flex items-center justify-center mb-5 md:mb-8 text-2xl md:text-3xl shadow-sm border border-blue-200 group-hover:scale-110 transition-transform duration-500">
+                💧
+              </div>
+              <h3 className="text-xl md:text-3xl font-bold text-zinc-900 mb-3 md:mb-4">Kwas Hialuronowy</h3>
+              <p className="text-zinc-600 leading-relaxed text-sm md:text-lg">
+                Absolutny hit w nawilżaniu. Działa jak gąbka, przyciągając i zatrzymując wilgoć wewnątrz włosa. To właśnie on sprawia, że szorstkie i matowe pasma stają się <strong className="text-zinc-900 font-semibold">niesamowicie miękkie, elastyczne i lśniące</strong> jak tafla szkła.
+              </p>
+            </div>
+            
+            <div className="relative w-full h-40 md:h-56 rounded-2xl md:rounded-3xl overflow-hidden shadow-inner mt-auto">
+              <img src="/images/hyaluron.jpg" alt="Kwas hialuronowy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-t from-blue-900/30 to-transparent mix-blend-multiply"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // 6. Преимущества (Benefits)
 function Benefits() {
   const items = [
@@ -265,15 +332,28 @@ function Benefits() {
   ];
 
   return (
-    <section id="benefits" className="py-24 bg-white">
-      <div className="mx-auto max-w-6xl px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Dlaczego klientki ją uwielbiają</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <section id="benefits" className="py-16 md:py-24 bg-white">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <h2 className="text-2xl md:text-4xl font-bold text-center mb-10 md:mb-16">
+          Dlaczego klientki ją uwielbiają
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {items.map((x, i) => (
-            <div key={i} className="group p-8 rounded-3xl bg-zinc-50 hover:bg-pink-50 transition-colors shadow-sm hover:shadow-xl border border-zinc-100">
-              <div className="text-3xl mb-4 bg-white w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm group-hover:scale-110 transition-transform">{x.icon}</div>
-              <h3 className="font-bold text-xl text-zinc-900">{x.t}</h3>
-              <p className="text-sm text-zinc-600 mt-3">{x.d}</p>
+            <div 
+              key={i} 
+              className="group flex flex-row sm:flex-col items-center sm:items-start p-5 md:p-8 rounded-2xl md:rounded-3xl bg-zinc-50 hover:bg-pink-50 transition-colors shadow-sm hover:shadow-xl border border-zinc-100 gap-4 sm:gap-0"
+            >
+              <div className="flex-shrink-0 text-2xl md:text-3xl mb-0 sm:mb-4 bg-white w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-xl md:rounded-2xl shadow-sm group-hover:scale-110 transition-transform">
+                {x.icon}
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-base md:text-xl text-zinc-900 text-left">
+                  {x.t}
+                </h3>
+                <p className="text-xs md:text-sm text-zinc-600 mt-1 md:mt-3 text-left leading-relaxed">
+                  {x.d}
+                </p>
+              </div>
             </div>
           ))}
         </div>

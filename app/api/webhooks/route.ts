@@ -4,6 +4,16 @@ import Stripe from 'stripe'
 
 import { stripe } from '../../../lib/stripe'
 
+// === СЛОВАРЬ НАЗВАНИЙ ДЛЯ АНАЛИТИКИ ===
+const VARIANT_NAMES: Record<string, string> = {
+    'scorpion': 'Czarny Balsam z Jadem Skorpiona',
+    'cobra': 'Czarny Balsam z Ekstraktem z Kobry',
+    'tiger': 'Tradycyjny Balsam Tygrysi',
+    'yellow': 'Żółta Maść Ziołowa',
+    'green': 'Zielona Maść Ziołowa',
+    'red': 'Czerwona Maść Ziołowa'
+}
+
 export async function POST(req: Request) {
     const body = await req.text()
     const signature = (await headers()).get('stripe-signature')
@@ -29,7 +39,6 @@ export async function POST(req: Request) {
         )
     }
 
-    // Обрабатываем событие синхронно перед возвратом ответа
     const processEvent = async () => {
         const permittedEvents = ['checkout.session.completed', 'checkout.session.async_payment_failed']
 
@@ -47,12 +56,18 @@ export async function POST(req: Request) {
 
                     if (data.payment_status === 'paid') {
                         console.log('🔍 Preparing GA purchase event...')
+                        
+                        // Получаем ID бальзама из метадаты (или ставим скорпиона по умолчанию)
+                        const variantId = data.metadata?.selected_variant || 'scorpion'
+                        const variantName = VARIANT_NAMES[variantId] || 'Oryginalny tajski balsam'
+
                         console.log('Session data:', JSON.stringify({
                             id: data.id,
                             client_reference_id: data.client_reference_id,
                             amount_total: data.amount_total,
                             currency: data.currency,
-                            metadata: data.metadata
+                            metadata: data.metadata,
+                            purchased_variant: variantName // Логируем, что именно купили
                         }, null, 2))
 
                         const eventParams: Record<string, any> = {
@@ -60,8 +75,8 @@ export async function POST(req: Request) {
                             value: (data.amount_total || 0) / 100,
                             currency: data.currency?.toUpperCase() || 'USD',
                             items: [{
-                                item_id: 'scorpion-balm',
-                                item_name: 'Banna Scorpion Thai Balm Black',
+                                item_id: variantId, // ДИНАМИЧЕСКИЙ ID ТОВАРА
+                                item_name: variantName, // ДИНАМИЧЕСКОЕ ИМЯ ТОВАРА
                                 price: (data.amount_total || 0) / 100,
                                 quantity: 1
                             }]
@@ -87,16 +102,13 @@ export async function POST(req: Request) {
 
                         const gaUrl = `https://www.google-analytics.com/mp/collect?measurement_id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`
 
-                        console.log('📤 GA Request URL:', gaUrl.replace(process.env.GA_API_SECRET || '', '***'))
-                        console.log('📤 GA Payload:', JSON.stringify(gaPayload, null, 2))
-
                         console.log('⏳ Starting fetch to GA...')
                         try {
                             const controller = new AbortController()
                             const timeoutId = setTimeout(() => {
                                 console.log('⏰ Fetch timeout - aborting')
                                 controller.abort()
-                            }, 10000) // 10 second timeout
+                            }, 10000)
 
                             const gaResponse = await fetch(gaUrl, {
                                 method: 'POST',
@@ -109,31 +121,18 @@ export async function POST(req: Request) {
                             console.log('✅ Fetch completed!')
                             console.log(`✅ GA Response Status: ${gaResponse.status} ${gaResponse.statusText}`)
 
-                            const responseText = await gaResponse.text()
-                            console.log('📥 GA Response Body:', responseText || '(empty)')
-
                             if (!gaResponse.ok) {
                                 console.error('❌ GA request failed:', {
                                     status: gaResponse.status,
                                     statusText: gaResponse.statusText,
-                                    body: responseText
+                                    body: await gaResponse.text()
                                 })
                             } else {
                                 console.log('🎉 GA event successfully sent!')
                             }
                         } catch (gaError) {
-                            if (gaError instanceof Error && gaError.name === 'AbortError') {
-                                console.error('❌ GA fetch timeout after 10 seconds')
-                            } else {
-                                console.error('❌ GA fetch error:', gaError)
-                                console.error('Error details:', {
-                                    message: gaError instanceof Error ? gaError.message : 'Unknown error',
-                                    name: gaError instanceof Error ? gaError.name : undefined,
-                                    stack: gaError instanceof Error ? gaError.stack : undefined
-                                })
-                            }
+                            console.error('❌ GA fetch error:', gaError)
                         }
-                        console.log('✔️ GA block completed')
                     }
                     break
 
@@ -172,9 +171,7 @@ export async function POST(req: Request) {
         }
     }
 
-    // Ждем завершения обработки перед возвратом ответа
     await processEvent().catch(err => console.error('Processing error:', err))
 
-    // Возвращаем 200 после обработки
     return NextResponse.json({ received: true }, { status: 200 })
 }
