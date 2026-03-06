@@ -2,11 +2,11 @@
 
 ## Overview
 
-This guide provides instructions for creating product landing pages based on the warming-ointments template. The system supports multiple products with product switching, mobile preview, Stripe integration, and responsive design.
+This guide provides instructions for creating product landing pages based on the banna-tajskie-balsamy template. The system supports multiple products with product switching, mobile preview, Stripe integration, and responsive design.
 
 ## File Structure
 
-For each landing page category (e.g., `warming-ointments`), you need to create:
+For each landing page category (e.g., `banna-tajskie-balsamy`), you need to create:
 
 ```
 app/lp/{category-name}/
@@ -123,7 +123,7 @@ The `getStripePriceId()` function in `lib/products.ts`:
 
 ### Color Scheme
 
-The warming-ointments template uses:
+The banna-tajskie-balsamy template uses:
 - Primary: Red-Orange gradient (`from-red-600 to-orange-600`)
 - Background: Dark gradient (`from-red-950 via-zinc-900 to-orange-950`)
 - Accents: Red/Orange with opacity variations
@@ -185,7 +185,7 @@ Common tracking names:
 ### Step 0: Determine Landing Page Name
 
 Before starting, decide on the landing page category name:
-- Use kebab-case (e.g., `warming-ointments`, `hair-care`, `skin-products`)
+- Use kebab-case (e.g., `banna-tajskie-balsamy`, `hair-care`, `skin-products`)
 - Keep it descriptive and URL-friendly
 - This will be used for:
   - Directory name: `app/lp/{category-name}/`
@@ -222,7 +222,7 @@ Define all products in the category with complete Product interface data.
 
 ### Step 4: Create page.tsx
 
-Copy and customize the warming-ointments template:
+Copy and customize the banna-tajskie-balsamy template:
 - Update color scheme if needed
 - Modify Hero section content
 - Customize Benefits items

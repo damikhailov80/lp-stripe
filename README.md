@@ -18,7 +18,7 @@ app/
 │   ├── checkout/route.ts      # Stripe checkout session creation
 │   └── webhooks/route.ts      # Stripe webhook handler (GA4 integration)
 ├── lp/
-│   ├── warming-ointments/     # Product landing page
+│   ├── banna-tajskie-balsamy/     # Product landing page
 │   └── keratin-repair-mask/   # Product landing page
 └── components/
     └── analytics.tsx          # Google Analytics component

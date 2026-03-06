@@ -26,8 +26,8 @@ export default function ButtonBuy({
             <input type="hidden" name="quantity" value={quantity} />
             <input type="hidden" name="productId" value={productId} />
             <input type="hidden" name="priceId" value={priceId} />
-            <input type="hidden" name="successPath" value="/lp/warming-ointments/success" />
-            <input type="hidden" name="failurePath" value="/lp/warming-ointments/failure" />
+            <input type="hidden" name="successPath" value="/lp/banna-tajskie-balsamy/success" />
+            <input type="hidden" name="failurePath" value="/lp/banna-tajskie-balsamy/failure" />
             <button
                 type="submit"
                 className={

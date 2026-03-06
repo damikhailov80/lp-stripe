@@ -7,10 +7,10 @@ You are an AI assistant helping to create product landing pages for an e-commerc
 ## Reference Template
 
 The reference implementation is located at:
-- Main page: `app/lp/warming-ointments/page.tsx`
-- Data file: `app/lp/warming-ointments/data.ts`
-- Success page: `app/lp/warming-ointments/success/page.tsx`
-- Failure page: `app/lp/warming-ointments/failure/page.tsx`
+- Main page: `app/lp/banna-tajskie-balsamy/page.tsx`
+- Data file: `app/lp/banna-tajskie-balsamy/data.ts`
+- Success page: `app/lp/banna-tajskie-balsamy/success/page.tsx`
+- Failure page: `app/lp/banna-tajskie-balsamy/failure/page.tsx`
 - Button component: `app/components/ButtonBuy.tsx`
 - Products utility: `lib/products.ts`
 
@@ -50,7 +50,7 @@ From each HTML page, extract:
 
 Before creating the pages, ask the user:
 
-**"I'll create the landing pages based on the warming-ointments template. Would you like to customize the design?"**
+**"I'll create the landing pages based on the banna-tajskie-balsamy template. Would you like to customize the design?"**
 
 Options to discuss:
 - **Color scheme**: Keep red-orange gradient or use different colors?
@@ -58,7 +58,7 @@ Options to discuss:
 - **Branding**: TikTok channel name, social media links
 - **Special features**: Any unique functionality needed?
 
-If user wants default design, proceed with the warming-ointments color scheme.
+If user wants default design, proceed with the banna-tajskie-balsamy color scheme.
 
 ### Step 4: Download Product Images
 
@@ -244,7 +244,7 @@ After creating all files:
 **AI**: 
 1. "I've analyzed the products. I suggest naming this landing page `thai-hair-care`. Does this work for you?"
 2. [Wait for confirmation]
-3. "Great! Would you like to customize the design, or should I use the default red-orange gradient theme from the warming-ointments template?"
+3. "Great! Would you like to customize the design, or should I use the default red-orange gradient theme from the banna-tajskie-balsamy template?"
 4. [Wait for design preferences]
 5. [Download images]
 6. [Create all files]
