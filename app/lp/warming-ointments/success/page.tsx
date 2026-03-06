@@ -51,7 +51,7 @@ export default function SuccessPage({
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
-            href="/lp/scorpion-balm"
+            href="/lp/warming-ointments"
             className="px-8 py-4 rounded-2xl bg-white/10 border border-white/30 text-white hover:bg-white/20 transition"
             data-track="true"
             data-track-name="back_to_product"
