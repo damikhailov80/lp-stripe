@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { productsData } from './data';
 import ButtonBuy from '../../components/ButtonBuy';
@@ -23,6 +23,16 @@ function PageContent() {
     }
     return defaultProductId;
   });
+
+  // Sync selectedProductId with URL changes (browser back/forward)
+  useEffect(() => {
+    const productParam = searchParams.get('product');
+    if (productParam && productIds.includes(productParam as ProductId)) {
+      setSelectedProductId(productParam as ProductId);
+    } else if (!productParam) {
+      setSelectedProductId(defaultProductId);
+    }
+  }, [searchParams]);
 
   const product = productsData[selectedProductId];
   const priceId = getStripePriceId(product.stripePriceId);
