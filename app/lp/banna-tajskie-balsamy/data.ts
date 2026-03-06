@@ -30,7 +30,7 @@ export const productsData: Record<string, Product> = {
         imageAlt: "Banna Scorpion Thai Balm Black",
         description: "Natychmiastowa ulga w bólach mięśni i stawów. Ponad 100 tajskich ziół leczniczych + ekstrakt z jadu skorpiona dla maksymalnej skuteczności.",
         stripePriceId: {
-            production: "price_1T68KgHSVM2lsj0Jss4XYXJz",
+            production: "price_1T7v3SHSVM2lsj0JKYIffoTR",
             development: "price_1T4by9FxNbQ4QwoifKmO4gxC"
         }
     },
