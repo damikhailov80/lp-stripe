@@ -55,7 +55,7 @@ export default function FailurePage({
 
                 <div className="flex justify-center">
                     <a
-                        href="/lp/scorpion-balm"
+                        href="/lp/warming-ointments"
                         className="px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold hover:scale-105 transition"
                         data-track="true"
                         data-track-name="retry_payment"

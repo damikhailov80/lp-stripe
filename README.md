@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Landing Pages with Stripe Integration
+
+Next.js project with Stripe checkout and Google Analytics integration.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/
+├── api/stripe/
+│   ├── checkout/route.ts      # Stripe checkout session creation
+│   └── webhooks/route.ts      # Stripe webhook handler (GA4 integration)
+├── lp/
+│   ├── warming-ointments/     # Product landing page
+│   └── keratin-repair-mask/   # Product landing page
+└── components/
+    └── analytics.tsx          # Google Analytics component
+```
 
-## Learn More
+## API Endpoints
 
-To learn more about Next.js, take a look at the following resources:
+### POST /api/stripe/checkout
+Creates Stripe checkout session. Requires form data:
+- `productId` - Product identifier
+- `priceId` - Stripe price ID
+- `quantity` - Item quantity
+- `successPath` - Redirect path on success
+- `failurePath` - Redirect path on cancel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### POST /api/stripe/webhooks
+Handles Stripe webhooks and sends purchase events to Google Analytics 4.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Environment Variables
+
+Create `.env` file:
+
+```env
+# Stripe
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Google Analytics
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-...
+GA_API_SECRET=...
+```
+
+## Stripe Setup
+
+1. Get API keys from [Stripe Dashboard](https://dashboard.stripe.com/apikeys)
+2. Configure webhook endpoint in Stripe Dashboard:
+   - URL: `https://yourdomain.com/api/stripe/webhooks`
+   - Events: `checkout.session.completed`
+3. For local development:
+   ```bash
+   stripe listen --forward-to localhost:3000/api/stripe/webhooks
+   ```
+
+## Testing
+
+Test webhook integration:
+```bash
+./test-webhook-ga.sh      # Local testing
+./test-webhook-prod.sh    # Production testing
+```
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Remember to:
+1. Add environment variables in Vercel dashboard
+2. Update Stripe webhook URL to production domain

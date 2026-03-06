@@ -11,24 +11,27 @@ export async function POST(request: Request) {
 
         const formData = await request.formData()
         const quantity = parseInt(formData.get('quantity') as string || '1', 10)
+        const productId = formData.get('productId') as string
+        const priceId = formData.get('priceId') as string
+        const successPath = formData.get('successPath') as string
+        const failurePath = formData.get('failurePath') as string
+
+        if (!productId || !priceId || !successPath || !failurePath) {
+            throw new Error('Missing required parameters')
+        }
 
         // Extract query parameters from referer URL
         const refererUrl = new URL(referer)
         const ttAccount = refererUrl.searchParams.get('tt_account')
 
         // Build success URL with query parameters
-        const successUrl = new URL(`${origin}/lp/scorpion-balm/success`)
+        const successUrl = new URL(`${origin}${successPath}`)
         successUrl.searchParams.set('session_id', '{CHECKOUT_SESSION_ID}')
         if (ttAccount) successUrl.searchParams.set('tt_account', ttAccount)
 
         // Build cancel/failure URL with query parameters
-        const cancelUrl = new URL(`${origin}/lp/scorpion-balm/failure`)
+        const cancelUrl = new URL(`${origin}${failurePath}`)
         if (ttAccount) cancelUrl.searchParams.set('tt_account', ttAccount)
-
-        // Create Checkout Sessions for Scorpion Balm
-        const priceId = process.env.NODE_ENV === 'production'
-            ? 'price_1T4eesHSVM2lsj0JF3QX4aKI'
-            : 'price_1T4by9FxNbQ4QwoifKmO4gxC'
 
         const session = await stripe.checkout.sessions.create({
             line_items: [
@@ -46,6 +49,7 @@ export async function POST(request: Request) {
             },
             locale: 'pl',
             metadata: {
+                product_id: productId,
                 ...(ttAccount && { tt_account: ttAccount }),
             },
         })

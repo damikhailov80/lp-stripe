@@ -1,22 +1,77 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { productsData } from './data';
+import ButtonBuy from '../../components/ButtonBuy';
+import { getStripePriceId } from '../../../lib/products';
 
-export default function Page() {
+type ProductId = keyof typeof productsData;
+
+const productIds = Object.keys(productsData) as ProductId[];
+const defaultProductId = productIds[0];
+
+function PageContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [quantity, setQuantity] = useState(1);
+  const [selectedProductId, setSelectedProductId] = useState<ProductId>(() => {
+    const productParam = searchParams.get('product');
+    if (productParam && productIds.includes(productParam as ProductId)) {
+      return productParam as ProductId;
+    }
+    return defaultProductId;
+  });
+
+  const product = productsData[selectedProductId];
+  const priceId = getStripePriceId(product.id, product.stripePriceId);
+
+  const updateProductInUrl = (productId: ProductId) => {
+    setSelectedProductId(productId);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('product', productId);
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
 
   return (
     <main className="min-h-screen bg-white text-zinc-900">
-      <Hero quantity={quantity} setQuantity={setQuantity} />
+      <Hero
+        quantity={quantity}
+        setQuantity={setQuantity}
+        product={product}
+        priceId={priceId}
+        selectedProductId={selectedProductId}
+        setSelectedProductId={updateProductInUrl}
+      />
       <Benefits />
       <HowToUse />
-      <CTA quantity={quantity} setQuantity={setQuantity} />
+      <CTA quantity={quantity} setQuantity={setQuantity} product={product} priceId={priceId} />
     </main>
   );
 }
 
-function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: number) => void }) {
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <PageContent />
+    </Suspense>
+  );
+}
+
+import type { Product } from './data';
+
+function Hero({ quantity, setQuantity, product, priceId, selectedProductId, setSelectedProductId }: {
+  quantity: number;
+  setQuantity: (q: number) => void;
+  product: Product;
+  priceId: string;
+  selectedProductId: ProductId;
+  setSelectedProductId: (id: ProductId) => void;
+}) {
   const [isImageOpen, setIsImageOpen] = useState(false);
+
+  const allProducts = Object.entries(productsData).map(([id, data]) => ({ id, data }));
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-red-950 via-zinc-900 to-orange-950">
@@ -39,8 +94,8 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
             <div className="relative bg-gradient-to-br from-zinc-800 to-zinc-900 p-8 rounded-3xl shadow-2xl border border-white/10">
               <div className="absolute inset-0 bg-gradient-to-br from-red-600/10 to-orange-600/10 rounded-3xl"></div>
               <img
-                src="/assets/images/scorpion-balm.avif"
-                alt="Banna Scorpion Thai Balm Black"
+                src={product.imagePath}
+                alt={product.imageAlt}
                 className="relative w-full drop-shadow-2xl rounded-2xl"
               />
             </div>
@@ -50,71 +105,91 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
 
       <div className="mx-auto max-w-6xl px-6 py-6 md:py-8 grid md:grid-cols-2 gap-12 items-center relative z-10">
         <div>
-          <div className="p-6 rounded-3xl bg-gradient-to-r from-red-600/20 to-orange-600/20 backdrop-blur-sm border-2 border-red-500/50 shadow-xl">
+          <div className="p-3 md:p-6 rounded-2xl md:rounded-3xl bg-gradient-to-r from-red-600/20 to-orange-600/20 backdrop-blur-sm border-2 border-red-500/50 shadow-xl">
             <a
               href="https://www.tiktok.com/@balsamdladuszy"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-6 hover:opacity-90 transition group"
+              className="flex items-center gap-3 md:gap-6 hover:opacity-90 transition group"
               data-track="true"
               data-track-name="tiktok_link"
             >
               <img
                 src="/assets/images/balsamdladuszy.jpeg"
                 alt="Balsam dla duszy TikTok"
-                className="w-20 h-20 rounded-full border-4 border-red-500 shadow-lg group-hover:scale-110 transition-transform"
+                className="w-12 h-12 md:w-20 md:h-20 rounded-full border-2 md:border-4 border-red-500 shadow-lg group-hover:scale-110 transition-transform"
               />
               <div className="text-left flex-1">
-                <p className="text-white text-xl font-bold mb-2 flex items-center gap-2">
+                <p className="text-white text-sm md:text-xl font-bold mb-1 md:mb-2 flex items-center gap-1 md:gap-2">
                   💝 Wspieraj nasz kanał TikTok!
                 </p>
-                <p className="text-white/90 text-base leading-relaxed">
-                  Dzięki zakupom publikujemy nowy content o azjatyckich dramach i anime: <span className="text-red-300 font-bold text-lg">@balsamdladuszy</span>
+                <p className="text-white/90 text-xs md:text-base leading-relaxed">
+                  Dzięki zakupom publikujemy nowy content o azjatyckich dramach i anime: <span className="text-red-300 font-bold text-sm md:text-lg">@balsamdladuszy</span>
                 </p>
               </div>
             </a>
           </div>
 
           <span className="inline-block mb-4 mt-8 text-xs font-semibold tracking-wider uppercase bg-red-600/20 text-red-400 px-3 py-1 rounded-full border border-red-500/30">
-            🦂 Oryginalny tajski balsam
+            {product.badge}
           </span>
 
           <div className="flex items-start gap-4 md:block">
             <div className="flex-1">
               <h1 className="text-3xl md:text-6xl font-bold leading-tight text-white">
-                Czarny Balsam
+                {product.name.split(' ').slice(0, 2).join(' ')}
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">
-                  z Jadem Skorpiona
+                  {product.name.split(' ').slice(2).join(' ')}
                 </span>
               </h1>
             </div>
 
             {/* Mobile Image - Right of Title */}
             <div className="md:hidden flex-shrink-0">
-              <img
-                src="/assets/images/scorpion-balm.avif"
-                alt="Banna Scorpion Thai Balm Black"
-                className="w-24 h-24 object-cover rounded-xl shadow-lg cursor-pointer hover:scale-105 transition-transform"
-                onClick={() => setIsImageOpen(true)}
-              />
+              <div className="w-32 h-32 flex items-center justify-center">
+                <img
+                  src={product.imagePath}
+                  alt={product.imageAlt}
+                  className="max-w-full max-h-full object-contain rounded-xl shadow-lg cursor-pointer hover:scale-105 transition-transform"
+                  onClick={() => setIsImageOpen(true)}
+                />
+              </div>
             </div>
+          </div>
+
+          {/* Mobile Product Selector - Below Title */}
+          <div className="md:hidden mt-6 flex gap-2">
+            {allProducts.map((p) => (
+              <button
+                key={p.id}
+                onClick={() => setSelectedProductId(p.id)}
+                className={`flex-1 py-2 px-3 rounded-lg text-sm font-semibold transition-all ${selectedProductId === p.id
+                  ? 'bg-red-600 text-white shadow-lg'
+                  : 'bg-white/10 text-white/70 border border-white/20'
+                  }`}
+                data-track="true"
+                data-track-name={`switch_to_${p.id}_mobile`}
+              >
+                <span className="text-base mr-1">{p.data.badge.split(' ')[0]}</span>
+                <span className="hidden xs:inline">{p.data.name.split(' ').pop()}</span>
+              </button>
+            ))}
           </div>
 
           <div className="mt-8 flex items-baseline gap-4">
             <div className="text-5xl md:text-6xl font-bold text-white">
-              33,91 zł
+              {product.price.toFixed(2)} zł
             </div>
             <div className="text-2xl md:text-3xl text-zinc-400 line-through">
-              55 zł
+              {product.originalPrice} zł
             </div>
             <div className="px-3 py-1 bg-red-600 text-white text-sm font-bold rounded-full">
-              -38%
+              {product.discount}
             </div>
           </div>
 
-          <p className="mt-6 text-lg text-zinc-300 max-w-lg leading-relaxed">
-            Natychmiastowa ulga w bólach mięśni i stawów. Ponad 100 tajskich ziół leczniczych
-            + ekstrakt z jadu skorpiona dla maksymalnej skuteczności.
+          <p className="mt-6 text-lg text-zinc-300 max-w-lg leading-relaxed h-24 overflow-hidden">
+            {product.description}
           </p>
 
           <div className="mt-10 flex flex-col gap-4">
@@ -139,17 +214,14 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <form action="/api/checkout_sessions/scorpion-balm" method="POST" className="w-full sm:w-auto">
-                <input type="hidden" name="quantity" value={quantity} />
-                <button
-                  type="submit"
-                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold shadow-2xl hover:shadow-red-500/50 hover:scale-105 active:scale-95 transition-all"
-                  data-track="true"
-                  data-track-name="buy_now_top"
-                >
-                  Kup teraz - 50g × {quantity}
-                </button>
-              </form>
+              <ButtonBuy
+                productId={product.id}
+                priceId={priceId}
+                quantity={quantity}
+                weight={product.weight}
+                variant="primary"
+                trackingName="buy_now_top"
+              />
 
               <button
                 onClick={() => {
@@ -169,10 +241,10 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
 
           <div className="mt-8 flex items-center gap-6 text-sm text-zinc-400">
             <div className="flex items-center gap-1">
-              <span className="text-yellow-400">★★★★★</span>
-              <span className="ml-1">4.8/5</span>
+              <span className="text-yellow-400">{'★'.repeat(Math.floor(product.rating))}</span>
+              <span className="ml-1">{product.rating}/5</span>
             </div>
-            <div>50g</div>
+            <div>{product.weight}</div>
             <div>🇹🇭 Tajlandia</div>
           </div>
         </div>
@@ -182,12 +254,36 @@ function Hero({ quantity, setQuantity }: { quantity: number; setQuantity: (q: nu
           <div className="absolute inset-0 bg-gradient-to-br from-red-600/30 to-orange-600/30 blur-3xl rounded-full"></div>
           <div className="relative bg-gradient-to-br from-zinc-800 to-zinc-900 p-8 rounded-3xl shadow-2xl border border-white/10">
             <div className="absolute inset-0 bg-gradient-to-br from-red-600/10 to-orange-600/10 rounded-3xl"></div>
-            <img
-              src="/assets/images/scorpion-balm.avif"
-              alt="Banna Scorpion Thai Balm Black"
-              className="relative w-full max-w-md mx-auto drop-shadow-2xl rounded-2xl transform hover:scale-105 transition-transform duration-300 cursor-pointer"
-              onClick={() => setIsImageOpen(true)}
-            />
+            <div className="relative w-full h-[500px] flex items-center justify-center">
+              <img
+                src={product.imagePath}
+                alt={product.imageAlt}
+                className="max-w-full max-h-full object-contain drop-shadow-2xl rounded-2xl transform hover:scale-105 transition-transform duration-300 cursor-pointer"
+                onClick={() => setIsImageOpen(true)}
+              />
+            </div>
+          </div>
+
+          {/* Product Thumbnails */}
+          <div className="mt-6 flex gap-4 justify-center">
+            {allProducts.map((p) => (
+              <button
+                key={p.id}
+                onClick={() => setSelectedProductId(p.id)}
+                className={`relative rounded-xl overflow-hidden transition-all ${selectedProductId === p.id
+                  ? 'ring-4 ring-red-500 scale-110'
+                  : 'ring-2 ring-white/20 hover:ring-white/40 opacity-60 hover:opacity-100'
+                  }`}
+                data-track="true"
+                data-track-name={`switch_to_${p.id}_thumbnail`}
+              >
+                <img
+                  src={p.data.imagePath}
+                  alt={p.data.imageAlt}
+                  className="w-20 h-20 object-cover"
+                />
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -310,7 +406,7 @@ function HowToUse() {
   );
 }
 
-function CTA({ quantity, setQuantity }: { quantity: number; setQuantity: (q: number) => void }) {
+function CTA({ quantity, setQuantity, product, priceId }: { quantity: number; setQuantity: (q: number) => void; product: Product; priceId: string }) {
   return (
     <section className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-red-600 via-orange-600 to-red-700"></div>
@@ -347,17 +443,14 @@ function CTA({ quantity, setQuantity }: { quantity: number; setQuantity: (q: num
             </button>
           </div>
 
-          <form action="/api/checkout_sessions/scorpion-balm" method="POST" className="w-full max-w-md px-4">
-            <input type="hidden" name="quantity" value={quantity} />
-            <button
-              type="submit"
-              className="w-full px-8 py-6 rounded-2xl bg-white text-red-600 font-bold text-base sm:text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all hover:shadow-white/50"
-              data-track="true"
-              data-track-name="buy_now_bottom"
-            >
-              Zamów teraz - 50g × {quantity}
-            </button>
-          </form>
+          <ButtonBuy
+            productId={product.id}
+            priceId={priceId}
+            quantity={quantity}
+            weight={product.weight}
+            variant="secondary"
+            trackingName="buy_now_bottom"
+          />
         </div>
 
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-8 text-white/80 text-sm">
