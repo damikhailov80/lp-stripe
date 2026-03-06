@@ -120,11 +120,11 @@ function Hero({ quantity, setQuantity, product, priceId, selectedProductId, setS
                 className="w-12 h-12 md:w-20 md:h-20 rounded-full border-2 md:border-4 border-red-500 shadow-lg group-hover:scale-110 transition-transform"
               />
               <div className="text-left flex-1">
-                <p className="text-white text-sm md:text-xl font-bold mb-1 md:mb-2 flex items-center gap-1 md:gap-2">
+                <p className="text-white text-xs md:text-xl font-bold mb-1 md:mb-2 flex items-center gap-1 md:gap-2">
                   💝 Wspieraj nasz kanał TikTok!
                 </p>
-                <p className="text-white/90 text-xs md:text-base leading-relaxed">
-                  Dzięki zakupom publikujemy nowy content o azjatyckich dramach i anime: <span className="text-red-300 font-bold text-sm md:text-lg">@balsamdladuszy</span>
+                <p className="text-white/90 text-[10px] md:text-base leading-relaxed">
+                  Dzięki zakupom publikujemy nowy content o azjatyckich dramach i anime: <span className="text-red-300 font-bold text-xs md:text-lg">@balsamdladuszy</span>
                 </p>
               </div>
             </a>
@@ -136,7 +136,7 @@ function Hero({ quantity, setQuantity, product, priceId, selectedProductId, setS
 
           <div className="flex items-start gap-4 md:block">
             <div className="flex-1">
-              <h1 className="text-3xl md:text-6xl font-bold leading-tight text-white">
+              <h1 className="text-2xl md:text-6xl font-bold leading-tight text-white">
                 {product.name.split(' ').slice(0, 2).join(' ')}
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">
                   {product.name.split(' ').slice(2).join(' ')}
@@ -163,32 +163,32 @@ function Hero({ quantity, setQuantity, product, priceId, selectedProductId, setS
               <button
                 key={p.id}
                 onClick={() => setSelectedProductId(p.id)}
-                className={`flex-1 py-2 px-3 rounded-lg text-sm font-semibold transition-all ${selectedProductId === p.id
+                className={`flex-1 py-3 px-2 rounded-xl text-xs font-semibold transition-all flex flex-col items-center gap-1 ${selectedProductId === p.id
                   ? 'bg-red-600 text-white shadow-lg'
-                  : 'bg-white/10 text-white/70 border border-white/20'
+                  : 'bg-white/10 text-white border border-white/30 hover:bg-white/20'
                   }`}
                 data-track="true"
                 data-track-name={`switch_to_${p.id}_mobile`}
               >
-                <span className="text-base mr-1">{p.data.badge.split(' ')[0]}</span>
-                <span className="hidden xs:inline">{p.data.name.split(' ').pop()}</span>
+                <span className="text-xl">{p.data.badge.split(' ')[0]}</span>
+                <span className="text-center leading-tight">{p.data.shortName}</span>
               </button>
             ))}
           </div>
 
-          <div className="mt-8 flex items-baseline gap-4">
-            <div className="text-5xl md:text-6xl font-bold text-white">
+          <div className="mt-8 flex items-baseline gap-2 md:gap-4">
+            <div className="text-3xl md:text-6xl font-bold text-white">
               {product.price.toFixed(2)} zł
             </div>
-            <div className="text-2xl md:text-3xl text-zinc-400 line-through">
+            <div className="text-lg md:text-3xl text-zinc-400 line-through">
               {product.originalPrice} zł
             </div>
-            <div className="px-3 py-1 bg-red-600 text-white text-sm font-bold rounded-full">
+            <div className="px-2 py-0.5 md:px-3 md:py-1 bg-red-600 text-white text-xs md:text-sm font-bold rounded-full">
               {product.discount}
             </div>
           </div>
 
-          <p className="mt-6 text-lg text-zinc-300 max-w-lg leading-relaxed h-24 overflow-hidden">
+          <p className="mt-6 text-sm md:text-lg text-zinc-300 max-w-lg leading-relaxed h-20 md:h-24 overflow-hidden">
             {product.description}
           </p>
 
@@ -270,9 +270,9 @@ function Hero({ quantity, setQuantity, product, priceId, selectedProductId, setS
               <button
                 key={p.id}
                 onClick={() => setSelectedProductId(p.id)}
-                className={`relative rounded-xl overflow-hidden transition-all ${selectedProductId === p.id
+                className={`relative rounded-xl overflow-hidden transition-all group ${selectedProductId === p.id
                   ? 'ring-4 ring-red-500 scale-110'
-                  : 'ring-2 ring-white/20 hover:ring-white/40 opacity-60 hover:opacity-100'
+                  : 'ring-2 ring-white/30 hover:ring-white/50 opacity-70 hover:opacity-100'
                   }`}
                 data-track="true"
                 data-track-name={`switch_to_${p.id}_thumbnail`}
@@ -280,8 +280,14 @@ function Hero({ quantity, setQuantity, product, priceId, selectedProductId, setS
                 <img
                   src={p.data.imagePath}
                   alt={p.data.imageAlt}
-                  className="w-20 h-20 object-cover"
+                  className="w-24 h-24 object-cover"
                 />
+                <div className={`absolute inset-x-0 bottom-0 py-1 text-xs font-bold text-center ${selectedProductId === p.id
+                  ? 'bg-red-600 text-white'
+                  : 'bg-black/70 text-white group-hover:bg-black/80'
+                  }`}>
+                  <span className="text-sm">{p.data.badge.split(' ')[0]}</span> {p.data.shortName}
+                </div>
               </button>
             ))}
           </div>
@@ -329,10 +335,10 @@ function Benefits() {
     <section id="benefits" className="py-24 bg-gradient-to-b from-white to-zinc-50">
       <div className="mx-auto max-w-6xl px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-zinc-900">
+          <h2 className="text-2xl md:text-5xl font-bold text-zinc-900">
             Dlaczego warto wybrać ten balsam?
           </h2>
-          <p className="mt-4 text-lg text-zinc-600 max-w-2xl mx-auto">
+          <p className="mt-4 text-sm md:text-lg text-zinc-600 max-w-2xl mx-auto">
             Sprawdzona tajska receptura, która pomogła tysiącom osób pozbyć się bólu
           </p>
         </div>
@@ -343,9 +349,9 @@ function Benefits() {
               key={i}
               className="group p-8 rounded-3xl bg-white hover:bg-gradient-to-br hover:from-red-50 hover:to-orange-50 transition-all shadow-sm hover:shadow-2xl border border-zinc-100"
             >
-              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{x.icon}</div>
-              <h3 className="font-bold text-xl text-zinc-900 mb-2">{x.t}</h3>
-              <p className="text-sm text-zinc-600 leading-relaxed">{x.d}</p>
+              <div className="text-3xl md:text-4xl mb-3 md:mb-4 group-hover:scale-110 transition-transform">{x.icon}</div>
+              <h3 className="font-bold text-base md:text-xl text-zinc-900 mb-2">{x.t}</h3>
+              <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">{x.d}</p>
             </div>
           ))}
         </div>
@@ -358,38 +364,38 @@ function HowToUse() {
   return (
     <section className="py-24 bg-white">
       <div className="mx-auto max-w-4xl px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+        <h2 className="text-2xl md:text-4xl font-bold text-center mb-12">
           Jak stosować?
         </h2>
 
         <div className="space-y-6">
           <div className="flex gap-6 items-start p-6 rounded-2xl bg-zinc-50 hover:bg-red-50 transition">
-            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xl">
+            <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-lg md:text-xl">
               1
             </div>
             <div>
-              <h3 className="font-semibold text-lg mb-2">Nałóż niewielką ilość</h3>
-              <p className="text-zinc-600">Weź odrobinę balsamu na dłoń</p>
+              <h3 className="font-semibold text-base md:text-lg mb-2">Nałóż niewielką ilość</h3>
+              <p className="text-sm md:text-base text-zinc-600">Weź odrobinę balsamu na dłoń</p>
             </div>
           </div>
 
           <div className="flex gap-6 items-start p-6 rounded-2xl bg-zinc-50 hover:bg-red-50 transition">
-            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xl">
+            <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-lg md:text-xl">
               2
             </div>
             <div>
-              <h3 className="font-semibold text-lg mb-2">Wcieraj delikatnie</h3>
-              <p className="text-zinc-600">Masuj bolesny obszar aż do całkowitego wchłonięcia</p>
+              <h3 className="font-semibold text-base md:text-lg mb-2">Wcieraj delikatnie</h3>
+              <p className="text-sm md:text-base text-zinc-600">Masuj bolesny obszar aż do całkowitego wchłonięcia</p>
             </div>
           </div>
 
           <div className="flex gap-6 items-start p-6 rounded-2xl bg-zinc-50 hover:bg-red-50 transition">
-            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xl">
+            <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-lg md:text-xl">
               3
             </div>
             <div>
-              <h3 className="font-semibold text-lg mb-2">Stosuj regularnie</h3>
-              <p className="text-zinc-600">2-3 razy dziennie dla najlepszych rezultatów</p>
+              <h3 className="font-semibold text-base md:text-lg mb-2">Stosuj regularnie</h3>
+              <p className="text-sm md:text-base text-zinc-600">2-3 razy dziennie dla najlepszych rezultatów</p>
             </div>
           </div>
         </div>
@@ -413,11 +419,11 @@ function CTA({ quantity, setQuantity, product, priceId }: { quantity: number; se
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMTRjMy4zMSAwIDYgMi42OSA2IDZzLTIuNjkgNi02IDYtNi0yLjY5LTYtNiAyLjY5LTYgNi02ek02IDM0YzMuMzEgMCA2IDIuNjkgNiA2cy0yLjY5IDYtNiA2LTYtMi42OS02LTYgMi42OS02IDYtNnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
 
       <div className="mx-auto max-w-4xl px-6 text-center relative z-10">
-        <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+        <h2 className="text-2xl md:text-6xl font-bold text-white leading-tight">
           Pożegnaj się z bólem już dziś!
         </h2>
 
-        <p className="mt-6 text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
+        <p className="mt-6 text-sm md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
           Dołącz do tysięcy zadowolonych klientów, którzy odkryli moc tajskiego balsamu ze skorpionem.
           Naturalna ulga w bólu bez chemii.
         </p>

@@ -1,6 +1,7 @@
 export interface Product {
     id: string;
     name: string;
+    shortName: string;
     badge: string;
     price: number;
     originalPrice: number;
@@ -17,26 +18,10 @@ export interface Product {
 }
 
 export const productsData: Record<string, Product> = {
-    "scorpion-balm": {
-        id: "scorpion-balm",
-        name: "Banna Czarny Balsam z Jadem Skorpiona",
-        badge: "🦂 Oryginalny tajski balsam",
-        price: 33.29,
-        originalPrice: 35.80,
-        discount: "-7%",
-        weight: "50g",
-        rating: 4.8,
-        imagePath: "/assets/images/banna-tajskie-balsamy/scorpion-balm.avif",
-        imageAlt: "Banna Scorpion Thai Balm Black",
-        description: "Natychmiastowa ulga w bólach mięśni i stawów. Ponad 100 tajskich ziół leczniczych + ekstrakt z jadu skorpiona dla maksymalnej skuteczności.",
-        stripePriceId: {
-            production: "price_1T7v3SHSVM2lsj0JKYIffoTR",
-            development: "price_1T4by9FxNbQ4QwoifKmO4gxC"
-        }
-    },
     "cobra-balm": {
         id: "cobra-balm",
         name: "Banna Czarny Balsam z Jadem Kobry",
+        shortName: "Kobra",
         badge: "🐍 Oryginalny tajski balsam",
         price: 33.29,
         originalPrice: 35.80,
@@ -51,9 +36,28 @@ export const productsData: Record<string, Product> = {
             development: "price_1T7j5RFxNbQ4Qwoi1UzW9rDJ"
         }
     },
+    "scorpion-balm": {
+        id: "scorpion-balm",
+        name: "Banna Czarny Balsam z Jadem Skorpiona",
+        shortName: "Skorpion",
+        badge: "🦂 Oryginalny tajski balsam",
+        price: 33.29,
+        originalPrice: 35.80,
+        discount: "-7%",
+        weight: "50g",
+        rating: 4.8,
+        imagePath: "/assets/images/banna-tajskie-balsamy/scorpion-balm.avif",
+        imageAlt: "Banna Scorpion Thai Balm Black",
+        description: "Natychmiastowa ulga w bólach mięśni i stawów. Ponad 100 tajskich ziół leczniczych + ekstrakt z jadu skorpiona dla maksymalnej skuteczności.",
+        stripePriceId: {
+            production: "price_1T7v3SHSVM2lsj0JKYIffoTR",
+            development: "price_1T4by9FxNbQ4QwoifKmO4gxC"
+        }
+    },
     "tiger-balm": {
         id: "tiger-balm",
         name: "Banna Tygrysi Balsam Rozgrzewający",
+        shortName: "Tygrys",
         badge: "🐯 Oryginalny tajski balsam",
         price: 33.29,
         originalPrice: 35.80,
