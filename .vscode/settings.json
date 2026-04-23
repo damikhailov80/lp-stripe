@@ -1,4 +1,8 @@
 {
     "kiroAgent.configureMCP": "Disabled",
-    "typescript.autoClosingTags": false
+    "typescript.autoClosingTags": false,
+    "git.enabled": true,
+    "git.path": "/usr/bin/git",
+    "git.autorefresh": true,
+    "git.detectSubmodules": true
 }
